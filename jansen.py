@@ -100,7 +100,7 @@ def analyse_trajectory(params):
         elif signe_change==2:
             mode[ss]=s.vstack((current,mode[ss]))
         else:
-            assert(False)
+            return -100
 
         signe_change+=1
 
@@ -120,35 +120,43 @@ def analyse_trajectory(params):
     
     score=-(total_length-6.)/2+step/1.-flatness/1e-2-bad_comeback
     print "length: %f step: %f flatness: %f height: %f comeback: %f score: %f" % (total_length,step,flatness,contact_height,bad_comeback,score)
+
     return score
 
+score = analyse_trajectory
 
-params=build_params(r=.2,a=1.6,b=.8,ap=1.3,bp=.6,d=1.)
-analyse_trajectory(params)
+if __name__ == "__main__":
+    import sys
 
-figure()
-subplot(111)
-subplots_adjust(bottom=0.2)
+    if len( sys.argv ) == 7:
+        params = [float(i) for i in sys.argv[1:]]
+    else:
+        params=build_params(r=.2,a=1.6,b=.8,ap=1.3,bp=.6,d=1.)
+    analyse_trajectory(params)
 
-axtheta=axes([0.1, 0.05, 0.8, 0.1])
-stheta=Slider(axtheta,'t',0,4*s.pi,valinit=s.pi/3)
+    figure()
+    subplot(111)
+    subplots_adjust(bottom=0.2)
 
-subplot(111)
-A,C,D,E=compute_trajectory(params)
-plot(A[:,0],A[:,1])
-plot(C[:,0],C[:,1])
-plot(D[:,0],D[:,1])
-plot(E[:,0],E[:,1])
-leg,=plot_leg(s.pi/3,params)
-axis("image")
-xlim(-1,1.5)
-ylim(-2,1)
+    axtheta=axes([0.1, 0.05, 0.8, 0.1])
+    stheta=Slider(axtheta,'t',0,4*s.pi,valinit=s.pi/3)
 
-def update(val):
-    update_leg(leg,val,params)
-    draw()
-
-stheta.on_changed(update)
-show()
+    subplot(111)
+    A,C,D,E=compute_trajectory(params)
+    plot(A[:,0],A[:,1])
+    plot(C[:,0],C[:,1])
+    plot(D[:,0],D[:,1])
+    plot(E[:,0],E[:,1])
+    leg,=plot_leg(s.pi/3,params)
+    axis("image")
+    xlim(-1,1.5)
+    ylim(-2,1)
+    
+    def update(val):
+        update_leg(leg,val,params)
+        draw()
+        
+    stheta.on_changed(update)
+    show()
 
 
