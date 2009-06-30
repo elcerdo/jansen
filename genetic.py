@@ -20,7 +20,7 @@ class Individual(object):
     
     def _makechromosome(self):
         "makes a chromosome from randomly selected alleles."
-        return [ r.normal(0.2, 0.1), r.normal(1.5, 0.3), r.normal(0.8, 0.2), r.normal(1.5, 0.3), r.normal(0.8, 0.2), r.normal(1.2, 0.4) ]
+        return [ r.normal(0.2, 0.2), r.normal(1.5, 0.5), r.normal(0.8, 0.3), r.normal(1.5, 0.5), r.normal(0.8, 0.3), r.normal(1.2, 0.4) ]
 
     def evaluate(self, optimum=None):
         "this method MUST be overridden to evaluate individual fitness score."
@@ -164,8 +164,6 @@ class Environment(object):
         print "best:       ", self.best
 
 
-
-
 #
 # onemax.py - useage example
 #
@@ -180,7 +178,7 @@ class OneMax(Individual):
         #print self.chromosome
         self.score = jansen.score(self.chromosome)
     def mutate(self, gene):
-        self.chromosome[gene] += random.randint(-5, 5)/10.0 # bit flip
+        self.chromosome[gene] += r.normal(0,.05) # bit flip
    
 if __name__ == "__main__":
     env = Environment(OneMax, mutation_rate=0.05, maxgenerations=10)

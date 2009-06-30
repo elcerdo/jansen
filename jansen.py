@@ -118,10 +118,16 @@ def analyse_trajectory(params):
             bad_comeback+=1.5
     bad_comeback/=mode[1].shape[0]
     
-    score=-(total_length-6.)/2+step/1.-flatness/1e-2-bad_comeback
+    #normalization
+    total_length=-abs(total_length-7)/2.5
+    step=step/.5
+    flatness=-flatness/1e-2
+    bad_comeback=-bad_comeback/1.2
+
+    score=total_length+step+flatness+bad_comeback
     print "length: %f step: %f flatness: %f height: %f comeback: %f score: %f" % (total_length,step,flatness,contact_height,bad_comeback,score)
 
-    return score
+    return score.real
 
 score = analyse_trajectory
 
